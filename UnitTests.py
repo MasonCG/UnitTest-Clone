@@ -189,7 +189,8 @@ def clear_terminal():
         _ = os.system('cls')
     # For macOS and Linux (POSIX systems)
     else:
-        _ = os.system('clear')
+        for i in range(5):
+            _ = os.system('clear')
 
 
 class UnitTests(object):
@@ -219,6 +220,7 @@ class UnitTests(object):
         self._testDir = "."
         self._modules = {}
         self._testData = {}
+        self.initialize()
 
     def initialize(self):
         
@@ -234,6 +236,7 @@ class UnitTests(object):
         for module in self._modules.keys():
             module_dict = {}
             klasses = [k for k, obj in inspect.getmembers(module) if inspect.isclass(obj)]
+            klasses[:] = [k for k in klasses if "Tests" in k]
             for k in klasses:
                 klass = getattr(sys.modules[module.__name__], k)
                 methods = [m for name, m in inspect.getmembers(klass, predicate=inspect.isfunction) if 'Test' in name]
@@ -243,11 +246,14 @@ class UnitTests(object):
 
     def __str__(self):
         s = "\n"
-        for key in self._modules:
-            s += f'{str(key)} -> [\n'
-            for klass, methods in self._modules[key].items():
-                s += f'\t{str(klass)} -> {"".join(str(methods))}\n'
-            s += ']\n'
+        for module in self._modules:
+            s += f'{module.__name__}: [\n'
+            for klass in self._modules[module]:
+                s += f'\t{klass.__name__}: ['
+                for method in self._modules[module][klass]:
+                    s += f' {method.__name__},'
+                s = s[:-1] + '],\n'
+            s += s[:-2] + '\n]\n\n'
         return s
 
     def testModule(self, module):

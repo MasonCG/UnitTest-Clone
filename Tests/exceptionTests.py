@@ -7,4 +7,4 @@ class ExceptionTests:
 
     def TestUnhandledException(self):
         # Should cause your runner to mark as failed
-        raise RuntimeError("Unhandled test error")
+        raise RuntimeError("Runtime Test Error")

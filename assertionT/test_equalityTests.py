@@ -1,4 +1,4 @@
-from assertions import Assert
+from UnitTests import Assert
 
 class EqualityTests:
     def TestEqual(self):

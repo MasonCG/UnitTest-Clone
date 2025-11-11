@@ -1,4 +1,4 @@
-from assertions import Assert
+from UnitTests import Assert
 
 def raises_zero_div():
     1 / 0

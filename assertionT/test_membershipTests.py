@@ -1,4 +1,4 @@
-from assertions import Assert
+from UnitTests import Assert
 
 class MembershipTests:
     def TestIn(self):

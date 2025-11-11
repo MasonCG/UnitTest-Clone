@@ -6,7 +6,6 @@ import sys
 import os
 import time
 from colorama import Fore, init
-import random
 
 init(autoreset=True)
 
@@ -26,79 +25,152 @@ class Assert():
     
 
     # Eaulity and Inequalities
-    def Equal(a: any, b: any) -> Exception:
+    def Equal(a: any, b: any) -> Exception | bool:
         """ Raises error if a != b """
         if not a == b:
             Assert.__raiseError(f"Expected [{a}], got [{b}]")
 
-    def NotEqual(a: any, b: any):
+        return True
+
+    def NotEqual(a: any, b: any) -> Exception | bool:
         """ Raises error if a == b """
         if a==b:
             Assert.__raiseError()
 
-    def AlmostEqual(a, b, places=7):
+        return True
+
+    def AlmostEqual(a, b, places=7) -> Exception | bool:
         roundA = round(a, places)
         roundB = round(b, places)
         if round(a, places) != round(b, places):
             Assert.__raiseError(f"Expected [{roundA}], got [{roundB}] round to [{places}] places")
 
-    def NotAlmostEqual(a, b, places=7):
+        return True
+        
+
+    def NotAlmostEqual(a, b, places=7) -> Exception | bool:
         if not round(a-b, places):
             Assert.__raiseError()
-    
+
+        return True
+        
     
     # Truthiness
-    def IsTrue(expr):
-        return expr
-    def IsFalse(expr):
-        return expr
-    def Is(expr1, expr2):
-        return expr1 == expr2
-    def IsNot(expr1, expr2):
-        return not (expr1 == expr2)
+    def IsTrue(expr) -> Exception | bool:
+        if not expr:
+            Assert.__raiseError()
+
+        return True
+        
+    def IsFalse(expr) -> Exception | bool:
+        if expr:
+            Assert.__raiseError()
+
+        return True
+        
+
+    def Is(expr1, expr2) -> Exception | bool:
+        if not expr1 == expr2:
+            Assert.__raiseError(f"Expected [{expr1}, got [{expr2}]]")
+
+        return True
+        
+    def IsNot(expr1, expr2) -> Exception | bool:
+        if (expr1 == expr2):
+            Assert.__raiseError()
+
+        return True
+            
     
     # None and Boolean Checks
-    def IsNone(obj):
-        return obj == None
-    def IsNotNone(obj):
-        return not (obj == None)
+    def IsNone(obj) -> Exception | bool:
+        if not obj == None:
+            Assert.__raiseError(f'Expected [None], got [{obj}]')
+
+        return True
+    
+    def IsNotNone(obj) -> Exception | bool:
+        if obj == None:
+            Assert.__raiseError(f"Expected [{obj}], got [None]")
+
+        return True
 
     # Membership and Type
-    def In(member, container):
-        return member in container
-    def NotIn(member, container):
-        return not (member in container)
-    def IsInstance(obj, cls):
-        return isinstance(obj, cls)
-    def IsNotInstance(obj, cls):
-        return not isinstance(obj, cls)
+    def In(member, container) -> Exception | bool:
+        if not member in container:
+            Assert.__raiseError()
+        
+        return True
+
+    def NotIn(member, container) -> Exception | bool:
+        if member in container:
+            Assert.__raiseError()
+
+        return True
+
+    def IsInstance(obj, cls) -> Exception | bool:
+        if not isinstance(obj, cls):
+            Assert.__raiseError(f'Expected [{cls}], got [{type(obj)}]')
+
+        return True
+    
+    def IsNotInstance(obj, cls) -> Exception | bool:
+        if isinstance(obj, cls):
+            Assert.__raiseError()
+
+        return True
+            
     
     # Exception and Wanring
-    def Raises(execType, func, *args, **kwargs):
+    def Raises(execType, func, *args, **kwargs) -> Exception | None:
+        execName = execType.__name__
+
         try:
             func(*args, **kwargs)
         except Exception as e:
-            if (execType == type(e)):
+            eName = type(e).__name__
+            if not execName == eName:
+                Assert.__raiseError(f"Expected [{execName}], got [{eName}]")
+            else:
                 return True
-        return False
-
+        
+        Assert.__raiseError(f"No Error Raised")
+        
     # def Warns(warning_type, func, *args, **kwargs)
 
     # Range and Numeric
-    def Greater(a, b):
-        return a > b
-    def GreaterEqual(a, b):
-        return a >= b
-    def Less(a, b):
-        return a < b
-    def LessEqual(a, b):
-        return a <= b
-    def InRange(x, low, high):
-        return low <= x <= high
+    def Greater(a, b) -> Exception | bool:
+        if not a > b:
+            Assert.__raiseError(f"[{a}] <= [{b}]")
+
+        return True
     
+    def GreaterEqual(a, b) -> Exception | bool:
+        if not a >= b:
+            Assert.__raiseError(f"[{a}] < [{b}]")
+
+        return True
+    
+    def Less(a, b) -> Exception | bool:
+        if not a < b:
+            Assert.__raiseError(f"[{a}] >= [{b}]")
+    
+        return True
+
+    def LessEqual(a, b) -> Exception | bool:
+        if not a <= b:
+            Assert.__raiseError(f"[{a}] > [{b}]")
+
+        return True
+
+    def InRange(x, low, high) -> Exception | bool:
+        if not low <= x <= high:
+            Assert.__raiseError(f'[{x}] not in range [{low, high}]')
+        
+        return True
+
 
     """ 
-
     🔹 Exception and Warning
     assertWarns(warning_type, func, *args, **kwargs)	True if warning raised.
     🔹 Custom Utility Booleans (optional but common in clones)

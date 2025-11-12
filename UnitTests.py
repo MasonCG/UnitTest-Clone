@@ -16,6 +16,7 @@ def testModules():
     TM = TestManager()
     TM.testAll()
     TM.printTests()
+    TM.CreateJUnitXmlReport()
         
         
 if __name__ == "__main__":

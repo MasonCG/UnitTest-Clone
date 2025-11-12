@@ -206,15 +206,30 @@ class TestManager(object):
     def CreateJUnitXmlReport(self, filename:str = "report.xml"):
         self.__testDataAvailable()
 
+        test_suites = []
         for module in self._testData:
+            test_cases = []
             for klass in self._testData[module]:
                 for method, result in self._testData[module][klass].items():
                     tc = TestCase(name=f'{method.__name__}.py', classname=klass.__name__, elapsed_sec=result[1])
                     
-                    if result[0] == 'skipped':
-                            tc.add_skipped_info(message=result[0])
-                    elif "Assert." in result[0] or result[0] == 'Expected failure':
+                    if result[0] == PASSED:
+                        tc.add_skipped_info(message=result[0])
+                    elif "Assert." in result[0] or result[0] == EXPECTED_FAILURE:
                         tc.add_failure_info(message=result[0])
+                    else:
+                        tc.add_error_info(message=result[0])
+                    
+                    test_cases.append(tc)
+            
+            test_suites.append(TestSuite(f'{module.__name__}.py', test_cases))
+
+        with open(filename, 'w') as f:
+            TestSuite.to_file(f, test_suites, prettyprint=True)
+
+        
+
+
 
 
 

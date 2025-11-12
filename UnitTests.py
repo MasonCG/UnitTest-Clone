@@ -10,7 +10,7 @@ Assert = Assertions.Assert
 # setting global Decorators
 skip = Decorators.skip
 expectedFailure = Decorators.expectedFailure
-
+failOut = Decorators.failOut
 
 def testModules():
     TM = TestManager()

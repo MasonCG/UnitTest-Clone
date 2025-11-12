@@ -1,3 +1,4 @@
+from UnitTests import failOut
 class MathTests:
     def TestAddition(self):
         assert 1 + 1 == 2

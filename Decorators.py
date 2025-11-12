@@ -7,3 +7,7 @@ def skip(reason):
 def expectedFailure(func):
     func.__expected_failure__ = True
     return func
+
+def failOut(func):
+    func.__fail_out__ = True
+    return func

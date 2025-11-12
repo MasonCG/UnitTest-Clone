@@ -45,6 +45,28 @@ class TestManager(object):
             startTime = time.time() - startTime
         return (msg, startTime)
     
+    def __failOut(self):
+        # current function call
+        current_frame = inspect.currentframe()
+        #  previous function call (testClass)
+        class_frame = current_frame.f_back
+        # function call before previous (testModule)
+        module_frame = class_frame.f_back
+        # getting results dict from testClass()
+        class_results = class_frame.f_locals['results']
+        # getting klass obj from testModule()
+        module_klass_obj = module_frame.f_locals['klass']
+        # getting results dict from testModule()
+        module_results = module_frame.f_locals['results']
+        # updating unfinished class results to results dict from testModule()
+        module_results[module_klass_obj] = class_results
+        # getting module obj from testModule()
+        module = module_frame.f_locals['module']
+        # updating testData to reflect all the tests
+        self._testData[module] = module_results
+
+        self.printTests(failing_out=True)
+        sys.exit(1)
 
 
     def initialize(self):
@@ -95,6 +117,7 @@ class TestManager(object):
             klass.setUpClass()
 
         for method in self._modules[module][klass]:
+            
             if hasattr(method, "__skip__"):
                 results[method] = self.__createTestTuple(msg="Skipped")
                 continue
@@ -105,8 +128,12 @@ class TestManager(object):
             if hasattr(klass, "setUp"):
                 klass.setUp(klass)
 
-            
-            results[method] = self.testMethod(klass, method)
+            result = self.testMethod(klass, method)
+            results[method] = result
+
+            #required to be emmitted after method failure
+            if hasattr(method, "__fail_out__") and result[0]:
+                self.__failOut()
             
             if hasattr(klass, "tearDown"):
                 klass.tearDown(klass)
@@ -144,7 +171,7 @@ class TestManager(object):
         for module in self._modules.keys():
             self._testData[module] = self.testModule(module)
 
-    def printTests(self):
+    def printTests(self, failing_out: bool =False) -> None:
 
         if not len(list(self._testData)):
             self.testAll()
@@ -181,4 +208,16 @@ class TestManager(object):
                     s += f'{Fore.BLUE}{klass.__name__}.{method.__name__:<25}{output} ({testing_time:.3f}s)\n'
                 s+= f'{'-'*50}\n'
                 s+=f"{Fore.RED}Passed: {passed} | Failed: {failed} | Skipped: {skipped} | Duration: {total_class_time:.2f}\n\n"
-            print(s + Style.RESET_ALL)
+            
+            print(s)
+
+        if failing_out:
+            print(f"{Style.BRIGHT}{Fore.RED}{'-'*50}\nTests have stopped! Last test failed out!\n{'-'*50}\n")
+
+        else:
+            print(f"{Fore.GREEN}{'-'*50}\nCongratulations all Tests have been run!\n{'-'*50}\n")
+
+        print(Style.RESET_ALL)
+
+        
+    

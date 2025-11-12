@@ -1,4 +1,4 @@
-from UnitTests import skip, expectedFailure
+from UnitTests import skip, expectedFailure, failOut, Assert
 class ConditionalTests:
     @skip("Feature not ready yet")
     def TestUnimplemented(self):
@@ -10,3 +10,11 @@ class ConditionalTests:
 
     def TestRegular(self):
         assert 3 * 3 == 9
+
+    @failOut
+    def TestFailOutPass(self):
+        assert 3 * 3 == 9
+
+    def TestFailOutFail(self):
+        Assert.Equal(4, 5)
+

@@ -5,10 +5,17 @@ import threading
 import sys
 import os
 import time
+from junit_xml import TestCase, TestSuite
 from colorama import Fore, Style
 
 # Custom python Module to help
 from Utils import clear_terminal
+
+# report constants
+PASSED: bool = None
+SKIPPED: str = "Skipped"
+EXPECTED_FAILURE: str = "Expected Failure"
+
 
 class TestManager(object):
     """
@@ -119,7 +126,7 @@ class TestManager(object):
         for method in self._modules[module][klass]:
             
             if hasattr(method, "__skip__"):
-                results[method] = self.__createTestTuple(msg="Skipped")
+                results[method] = self.__createTestTuple(msg=SKIPPED)
                 continue
             if hasattr(method, "__expected_failure__"):
                 results[method] = self.__createTestTuple(msg="Expected Failure")
@@ -164,7 +171,7 @@ class TestManager(object):
         except Exception as e:            
             return self.__createTestTuple(msg=e, startTime=start_time)
         
-        return self.__createTestTuple(msg=None,  startTime=start_time)
+        return self.__createTestTuple(msg=PASSED,  startTime=start_time)
 
     def testAll(self):
         self._testData = {}
@@ -196,17 +203,32 @@ class TestManager(object):
         if not len(list(self._testData)):
             raise LookupError("Test Data is not available. Please make sure to run testAlL before calling this function")
 
+    def CreateJUnitXmlReport(self, filename:str = "report.xml"):
+        self.__testDataAvailable()
+
+        for module in self._testData:
+            for klass in self._testData[module]:
+                for method, result in self._testData[module][klass].items():
+                    tc = TestCase(name=f'{method.__name__}.py', classname=klass.__name__, elapsed_sec=result[1])
+                    
+                    if result[0] == 'skipped':
+                            tc.add_skipped_info(message=result[0])
+                    elif "Assert." in result[0] or result[0] == 'Expected failure':
+                        tc.add_failure_info(message=result[0])
+
+
+
 
     def printTests(self, failing_out: bool =False) -> None:
 
         self.__testDataAvailable()
 
-        startTime = time.time()
-
         clear_terminal()
         print(Style.RESET_ALL)
+        total_time:float = 0
         for module in self._testData:
             s = f'{Fore.GREEN}Running Tests in {module.__name__}.py\n{Fore.BLUE}{'-'*50}\n'
+            total_module_time: float = 0
             for klass in self._testData[module].keys():
                 
                 total_class_time:float = 0    
@@ -218,24 +240,25 @@ class TestManager(object):
 
                     e, testing_time = result
                     output = self._passedString
-                    if not e:
+                    if e == PASSED:
                         passed += 1 
-                    elif e == "Skipped":
+                    elif e == SKIPPED:
                         skipped += 1
                         output = self._skippedString
                     else:
                         failed += 1
                         output = self._failedString
 
-                    total_class_time += testing_time
-
-                    if e != None:
+                    if e != PASSED:
                         output += f' {e}'
-                    
+
+                    total_class_time += testing_time                    
 
                     s += f'{Fore.BLUE}{klass.__name__}.{method.__name__:<25}{output} ({testing_time:.3f}s)\n'
+                total_module_time += total_class_time
                 s+= f'{'-'*50}\n'
                 s+=f"{Fore.RED}Passed: {passed} | Failed: {failed} | Skipped: {skipped} | Duration: {total_class_time:.2f}\n\n"
+            total_time += total_module_time
             
             print(s)
 
@@ -244,7 +267,7 @@ class TestManager(object):
         final_s += f'{"Modules Tests: ":<25}{self.__getNumModules()}\n' 
         final_s += f'{"Classes Tested: ":<25}{self.__getNumClasses()}\n'
         final_s += f'{"Methods Tested: ":<25}{self.__getNumMethods()}\n'
-        final_s += f'{"Test Duration: ":<25}{(time.time() - startTime):.3f}s\n'
+        final_s += f'{"Test Duration: ":<25}{total_time:.3f}s\n'
         final_s += f'{'-'*50}\n'
 
         print(final_s)

@@ -171,23 +171,51 @@ class TestManager(object):
         for module in self._modules.keys():
             self._testData[module] = self.testModule(module)
 
+    def __getNumModules(self) -> int:
+        self.__testDataAvailable()
+        return len(list(self._testData))
+    
+    def __getNumClasses(self) -> int:
+        self.__testDataAvailable()
+
+        numClasses: int = 0
+        for klass_dict in self._testData.values():
+            numClasses += len(list(klass_dict.keys()))
+
+        return numClasses
+    
+    def __getNumMethods(self) -> int:
+        self.__testDataAvailable()
+        numMethods: int = 0
+        for klass_dict in self._testData.values():
+            numMethods += len(list(klass_dict.values()))
+
+        return numMethods
+
+    def __testDataAvailable(self):
+        if not len(list(self._testData)):
+            raise LookupError("Test Data is not available. Please make sure to run testAlL before calling this function")
+
+
     def printTests(self, failing_out: bool =False) -> None:
 
-        if not len(list(self._testData)):
-            self.testAll()
+        self.__testDataAvailable()
 
+        startTime = time.time()
 
         clear_terminal()
         print(Style.RESET_ALL)
         for module in self._testData:
             s = f'{Fore.GREEN}Running Tests in {module.__name__}.py\n{Fore.BLUE}{'-'*50}\n'
             for klass in self._testData[module].keys():
+                
                 total_class_time:float = 0    
                 passed:int = 0
                 failed:int = 0
                 skipped:int = 0
 
                 for method, result in self._testData[module][klass].items():
+
                     e, testing_time = result
                     output = self._passedString
                     if not e:
@@ -210,6 +238,16 @@ class TestManager(object):
                 s+=f"{Fore.RED}Passed: {passed} | Failed: {failed} | Skipped: {skipped} | Duration: {total_class_time:.2f}\n\n"
             
             print(s)
+
+
+        final_s = f'{Fore.BLUE}{'-'*50}\n'
+        final_s += f'{"Modules Tests: ":<25}{self.__getNumModules()}\n' 
+        final_s += f'{"Classes Tested: ":<25}{self.__getNumClasses()}\n'
+        final_s += f'{"Methods Tested: ":<25}{self.__getNumMethods()}\n'
+        final_s += f'{"Test Duration: ":<25}{(time.time() - startTime):.3f}s\n'
+        final_s += f'{'-'*50}\n'
+
+        print(final_s)
 
         if failing_out:
             print(f"{Style.BRIGHT}{Fore.RED}{'-'*50}\nTests have stopped! Last test failed out!\n{'-'*50}\n")

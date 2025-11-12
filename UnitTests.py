@@ -14,9 +14,9 @@ failOut = Decorators.failOut
 
 def testModules():
     TM = TestManager()
+    TM.testAll()
     TM.printTests()
         
         
 if __name__ == "__main__":
-    TM = TestManager()
-    TM.printTests()
+    testModules()

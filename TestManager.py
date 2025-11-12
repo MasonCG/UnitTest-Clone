@@ -40,6 +40,13 @@ class TestManager(object):
         self._testData = {}
         self.initialize()
 
+    def __createTestTuple(self, msg: str | None, startTime: int = 0) -> tuple:
+        if startTime:
+            startTime = time.time() - startTime
+        return (msg, startTime)
+    
+
+
     def initialize(self):
         
         for root, dirs, files in os.walk(self._testDir):
@@ -89,10 +96,10 @@ class TestManager(object):
 
         for method in self._modules[module][klass]:
             if hasattr(method, "__skip__"):
-                results[method] = ("Skipped", 0)
+                results[method] = self.__createTestTuple(msg="Skipped")
                 continue
             if hasattr(method, "__expected_failure__"):
-                results[method] = ("Expected Failure", 0)
+                results[method] = self.__createTestTuple(msg="Expected Failure")
                 continue
 
             if hasattr(klass, "setUp"):
@@ -111,7 +118,7 @@ class TestManager(object):
         return results
                         
 
-    def testMethod(self, Klass, method):
+    def testMethod(self, Klass: object, method: object) -> Exception | tuple:
         start_time = time.time()
         method_signature = inspect.signature(method)
         method_paramaters = list(method_signature.parameters.keys())
@@ -126,11 +133,11 @@ class TestManager(object):
             elif method(Klass):
                 raise TypeError("Method must not return a value.")
         except AssertionError:
-            return ("Assertion Error", time.time() - start_time)
+            return self.__createTestTuple(msg="Assertion Error",startTime=start_time)
         except Exception as e:            
-            return (e, time.time() - start_time)
+            return self.__createTestTuple(msg=e, startTime=start_time)
         
-        return (None,  time.time() - start_time)
+        return self.__createTestTuple(msg=None,  startTime=start_time)
 
     def testAll(self):
         self._testData = {}

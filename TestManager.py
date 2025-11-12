@@ -34,6 +34,7 @@ class TestManager(object):
 
         self._passedString =  "✅"      
         self._failedString = "❌"
+        self._skippedString = "🟡"
         self._testDir = "."
         self._modules = {}
         self._testData = {}
@@ -87,8 +88,17 @@ class TestManager(object):
             klass.setUpClass()
 
         for method in self._modules[module][klass]:
+            if hasattr(method, "__skip__"):
+                results[method] = ("Skipped", 0)
+                continue
+            if hasattr(method, "__expected_failure__"):
+                results[method] = ("Expected Failure", 0)
+                continue
+
             if hasattr(klass, "setUp"):
                 klass.setUp(klass)
+
+            
             results[method] = self.testMethod(klass, method)
             
             if hasattr(klass, "tearDown"):
@@ -145,14 +155,23 @@ class TestManager(object):
 
                 for method, result in self._testData[module][klass].items():
                     e, testing_time = result
+                    output = self._passedString
                     if not e:
                         passed += 1 
+                    elif e == "Skipped":
+                        skipped += 1
+                        output = self._skippedString
                     else:
                         failed += 1
-                    total_class_time += testing_time
-                    ouput = self._passedString if not e else f'{self._failedString} {str(e)}'
+                        output = self._failedString
 
-                    s += f'{Fore.BLUE}{klass.__name__}.{method.__name__:<25}{ouput} ({testing_time:.3f}s)\n'
+                    total_class_time += testing_time
+
+                    if e != None:
+                        output += f' {e}'
+                    
+
+                    s += f'{Fore.BLUE}{klass.__name__}.{method.__name__:<25}{output} ({testing_time:.3f}s)\n'
                 s+= f'{'-'*50}\n'
                 s+=f"{Fore.RED}Passed: {passed} | Failed: {failed} | Skipped: {skipped} | Duration: {total_class_time:.2f}\n\n"
             print(s + Style.RESET_ALL)

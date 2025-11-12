@@ -1,9 +1,4 @@
-import sys
-import inspect
-import importlib
-import os
-from UnitTests import UnitTests, Assert
+import UnitTests
 
-ut = UnitTests()
-help(Assert)
+UnitTests.testModules()
 

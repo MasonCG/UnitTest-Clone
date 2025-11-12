@@ -2,9 +2,8 @@ import sys
 import inspect
 import importlib
 import os
-from UnitTests import UnitTests, Assert, clear_terminal
+from UnitTests import UnitTests, Assert
 
 ut = UnitTests()
-clear_terminal()
-print(ut)
+help(Assert)
 

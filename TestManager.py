@@ -15,14 +15,18 @@ from Utils import clear_terminal
 PASSED: bool = None
 SKIPPED: str = "Skipped"
 EXPECTED_FAILURE: str = "Expected Failure"
+PASSED_STR: str =  "✅"      
+FAILED_STR: str = "❌"
+FAILED_OUT_STR: str = "FAILED OUT -> "
+SKIPPED_STR: str = "🟡"
 
 
 class TestManager(object):
     """
         Holds all of the classes that have Test attatched. It only looks in the files that also have Test attached to the end.
     """
-    _instance = None
-    _initialized = None
+    _instance: object = None
+    _initialized: bool = False
     _lock = threading.Lock()
 
     def __new__(cls, *args, **kwargs):
@@ -37,11 +41,8 @@ class TestManager(object):
         if self._initialized:
             return
 
-        self._initialized = True
-
-        self._passedString =  "✅"      
-        self._failedString = "❌"
-        self._skippedString = "🟡"
+        self._initialized: bool = True
+        self._failingOut: bool = False
         self._testDir = "."
         self._modules = {}
         self._testData = {}
@@ -51,32 +52,8 @@ class TestManager(object):
         if startTime:
             startTime = time.time() - startTime
         return (msg, startTime)
-    
-    def __failOut(self):
-        # current function call
-        current_frame = inspect.currentframe()
-        #  previous function call (testClass)
-        class_frame = current_frame.f_back
-        # function call before previous (testModule)
-        module_frame = class_frame.f_back
-        # getting results dict from testClass()
-        class_results = class_frame.f_locals['results']
-        # getting klass obj from testModule()
-        module_klass_obj = module_frame.f_locals['klass']
-        # getting results dict from testModule()
-        module_results = module_frame.f_locals['results']
-        # updating unfinished class results to results dict from testModule()
-        module_results[module_klass_obj] = class_results
-        # getting module obj from testModule()
-        module = module_frame.f_locals['module']
-        # updating testData to reflect all the tests
-        self._testData[module] = module_results
 
-        self.printTests(failing_out=True)
-        sys.exit(1)
-
-
-    def initialize(self):
+    def initialize(self) -> None:
         
         for root, dirs, files in os.walk(self._testDir):
             dirs[:] = [d for d in dirs if "Tests" in d]
@@ -98,7 +75,7 @@ class TestManager(object):
 
             self._modules[module] = module_dict
 
-    def __str__(self):
+    def __str__(self) -> str:
         s = "\n"
         for module in self._modules:
             s += f'{module.__name__}: [\n'
@@ -110,7 +87,7 @@ class TestManager(object):
             s += s[:-2] + '\n]\n\n'
         return s
 
-    def testModule(self, module):
+    def testModule(self, module) -> dict:
         results = {}
         for klass in self._modules[module]:
             results[klass] = self.testClass(module, klass)
@@ -118,7 +95,7 @@ class TestManager(object):
         return results
         
 
-    def testClass(self, module, klass):
+    def testClass(self, module, klass) -> dict:
         results = {}
         if hasattr(klass, "setUpClass"):
             klass.setUpClass()
@@ -140,7 +117,8 @@ class TestManager(object):
 
             #required to be emmitted after method failure
             if hasattr(method, "__fail_out__") and result[0]:
-                self.__failOut()
+                self._failingOut = True
+                results[method] = self.__createTestTuple(msg=FAILED_OUT_STR + str(result[0]))
             
             if hasattr(klass, "tearDown"):
                 klass.tearDown(klass)
@@ -148,7 +126,6 @@ class TestManager(object):
         if hasattr(klass, "tearDownClass"):
             klass.tearDownClass()
         
-
         return results
                         
 
@@ -173,10 +150,12 @@ class TestManager(object):
         
         return self.__createTestTuple(msg=PASSED,  startTime=start_time)
 
-    def testAll(self):
+    def testAll(self) -> None:
         self._testData = {}
         for module in self._modules.keys():
             self._testData[module] = self.testModule(module)
+            if self._failingOut:
+                return
 
     def __getNumModules(self) -> int:
         self.__testDataAvailable()
@@ -203,7 +182,7 @@ class TestManager(object):
         if not len(list(self._testData)):
             raise LookupError("Test Data is not available. Please make sure to run testAlL before calling this function")
 
-    def CreateJUnitXmlReport(self, filename:str = "report.xml"):
+    def CreateJUnitXmlReport(self, filename:str = "test-results/report.xml"):
         self.__testDataAvailable()
 
         test_suites = []
@@ -213,11 +192,11 @@ class TestManager(object):
                 for method, result in self._testData[module][klass].items():
                     tc = TestCase(name=f'{method.__name__}.py', classname=klass.__name__, elapsed_sec=result[1])
                     
-                    if result[0] == PASSED:
+                    if result[0] == SKIPPED:
                         tc.add_skipped_info(message=result[0])
-                    elif "Assert." in result[0] or result[0] == EXPECTED_FAILURE:
+                    elif "Assert." in str(result[0]) or result[0] == EXPECTED_FAILURE:
                         tc.add_failure_info(message=result[0])
-                    else:
+                    else:                            
                         tc.add_error_info(message=result[0])
                     
                     test_cases.append(tc)
@@ -227,14 +206,8 @@ class TestManager(object):
         with open(filename, 'w') as f:
             TestSuite.to_file(f, test_suites, prettyprint=True)
 
-        
 
-
-
-
-
-
-    def printTests(self, failing_out: bool =False) -> None:
+    def printTests(self) -> None:
 
         self.__testDataAvailable()
 
@@ -254,15 +227,15 @@ class TestManager(object):
                 for method, result in self._testData[module][klass].items():
 
                     e, testing_time = result
-                    output = self._passedString
+                    output = PASSED_STR
                     if e == PASSED:
                         passed += 1 
                     elif e == SKIPPED:
                         skipped += 1
-                        output = self._skippedString
+                        output = SKIPPED_STR
                     else:
                         failed += 1
-                        output = self._failedString
+                        output = FAILED_STR
 
                     if e != PASSED:
                         output += f' {e}'
@@ -287,7 +260,7 @@ class TestManager(object):
 
         print(final_s)
 
-        if failing_out:
+        if self._failingOut:
             print(f"{Style.BRIGHT}{Fore.RED}{'-'*50}\nTests have stopped! Last test failed out!\n{'-'*50}\n")
 
         else:

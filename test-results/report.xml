@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<testsuites disabled="0" errors="3" failures="0" tests="27" time="0.00026798248291015625">
+	<testsuite disabled="0" errors="0" failures="0" name="test_membershipTests.py" skipped="0" tests="2" time="6.29425048828125e-05">
+		<testcase name="TestIn.py" time="0.000042" classname="MembershipTests"/>
+		<testcase name="TestNotIn.py" time="0.000021" classname="MembershipTests"/>
+	</testsuite>
+	<testsuite disabled="0" errors="0" failures="0" name="test_truthinessTests.py" skipped="0" tests="4" time="4.1961669921875e-05">
+		<testcase name="TestIs.py" time="0.000016" classname="TruthinessTests"/>
+		<testcase name="TestIsFalse.py" time="0.000009" classname="TruthinessTests"/>
+		<testcase name="TestIsNot.py" time="0.000009" classname="TruthinessTests"/>
+		<testcase name="TestIsTrue.py" time="0.000008" classname="TruthinessTests"/>
+	</testsuite>
+	<testsuite disabled="0" errors="0" failures="0" name="test_equalityTests.py" skipped="0" tests="4" time="3.7670135498046875e-05">
+		<testcase name="TestAlmostEqual.py" time="0.000015" classname="EqualityTests"/>
+		<testcase name="TestEqual.py" time="0.000008" classname="EqualityTests"/>
+		<testcase name="TestNotAlmostEqual.py" time="0.000008" classname="EqualityTests"/>
+		<testcase name="TestNotEqual.py" time="0.000007" classname="EqualityTests"/>
+	</testsuite>
+	<testsuite disabled="0" errors="0" failures="0" name="test_rangeAndNumericTests.py" skipped="0" tests="5" time="3.266334533691406e-05">
+		<testcase name="TestGreater.py" time="0.000006" classname="RangeAndNumericTests"/>
+		<testcase name="TestGreaterEqual.py" time="0.000008" classname="RangeAndNumericTests"/>
+		<testcase name="TestInRange.py" time="0.000007" classname="RangeAndNumericTests"/>
+		<testcase name="TestLess.py" time="0.000006" classname="RangeAndNumericTests"/>
+		<testcase name="TestLessEqual.py" time="0.000006" classname="RangeAndNumericTests"/>
+	</testsuite>
+	<testsuite disabled="0" errors="0" failures="0" name="test_noneAndTypeTests.py" skipped="0" tests="4" time="2.9087066650390625e-05">
+		<testcase name="TestIsInstance.py" time="0.000008" classname="NoneAndTypeTests"/>
+		<testcase name="TestIsNone.py" time="0.000007" classname="NoneAndTypeTests"/>
+		<testcase name="TestIsNotInstance.py" time="0.000008" classname="NoneAndTypeTests"/>
+		<testcase name="TestIsNotNone.py" time="0.000006" classname="NoneAndTypeTests"/>
+	</testsuite>
+	<testsuite disabled="0" errors="0" failures="0" name="test_exceptionTests.py" skipped="0" tests="1" time="1.3828277587890625e-05">
+		<testcase name="TestRaises.py" time="0.000014" classname="ExceptionTests"/>
+	</testsuite>
+	<testsuite disabled="0" errors="0" failures="0" name="nestedTests.py" skipped="0" tests="1" time="6.9141387939453125e-06">
+		<testcase name="TestOuter.py" time="0.000007" classname="OuterTests"/>
+	</testsuite>
+	<testsuite disabled="0" errors="1" failures="0" name="exceptionTests.py" skipped="0" tests="2" time="1.5020370483398438e-05">
+		<testcase name="TestRaiseException.py" time="0.000008" classname="ExceptionTests"/>
+		<testcase name="TestUnhandledException.py" time="0.000007" classname="ExceptionTests">
+			<error type="error" message="Runtime Test Error"/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="2" failures="0" name="assertionHelperTests.py" skipped="0" tests="4" time="2.7894973754882812e-05">
+		<testcase name="TestEqual.py" time="0.000012" classname="AssertionHelperTests">
+			<error type="error" message="(line 5) Asssert.Equal Error: Expected [9], got [10]"/>
+		</testcase>
+		<testcase name="TestInRange.py" time="0.000007" classname="AssertionHelperTests"/>
+		<testcase name="TestRounded.py" time="0.000009" classname="AssertionHelperTests"/>
+		<testcase name="TestTrueFalse.py" classname="AssertionHelperTests">
+			<error type="error" message="FAILED OUT -&gt; (line 12) Asssert.IsTrue Error: "/>
+		</testcase>
+	</testsuite>
+</testsuites>

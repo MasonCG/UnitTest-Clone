@@ -1,0 +1,4 @@
+{
+  "python.testing.autoTestDiscoverOnSaveEnabled": true,
+  "testExplorer.files": "test-results/*.xml"
+}

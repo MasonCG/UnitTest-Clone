@@ -1,4 +1,4 @@
-from UnitTests import Assert
+from UnitTests import Assert, failOut
 
 class AssertionHelperTests:
     def TestEqual(self):
@@ -6,10 +6,10 @@ class AssertionHelperTests:
 
     def TestInRange(self):
         Assert.InRange(5, 1, 10)
-
+    @failOut
     def TestTrueFalse(self):
         Assert.IsTrue(3 < 5)
-        Assert.IsFalse(5 < 3)
+        Assert.IsTrue(5 < 3)
 
     def TestRounded(self):
         Assert.AlmostEqual(2.001, 2.003, 2)

@@ -4,6 +4,7 @@ import inspect
 import threading
 import sys
 import os
+import multiprocessing as mp
 import time
 from junit_xml import TestCase, TestSuite
 from colorama import Fore, Style
@@ -19,7 +20,6 @@ PASSED_STR: str =  "✅"
 FAILED_STR: str = "❌"
 FAILED_OUT_STR: str = "FAILED OUT -> "
 SKIPPED_STR: str = "🟡"
-
 
 class TestManager(object):
     """
@@ -46,6 +46,7 @@ class TestManager(object):
         self._testDir = "."
         self._modules = {}
         self._testData = {}
+        self._unhandled_threads = []
         self.initialize()
 
     def __createTestTuple(self, msg: str | None, startTime: int = 0) -> tuple:
@@ -129,20 +130,30 @@ class TestManager(object):
         return results
                         
 
-    def testMethod(self, Klass: object, method: object) -> Exception | tuple:
+    def testMethod(self, Klass: object, method: callable) -> Exception | tuple:
         start_time = time.time()
         method_signature = inspect.signature(method)
         method_paramaters = list(method_signature.parameters.keys())
 
         try:
+                
+                
+
             if len(method_paramaters) > 1 or method_paramaters[0] != 'self':
                 raise TypeError("Method must only have 1 positional argument 'self'")
 
-            if not method_paramaters and not method():
-                raise TypeError("Method must not return a value")
+            if not method_paramaters:
 
-            elif method(Klass):
-                raise TypeError("Method must not return a value.")
+                if method():
+                    raise TypeError("Method must not return a value")
+
+            else:
+                p = mp.Process(target=method, args=(Klass,), daemon=False)
+                p.start()
+
+                if method(Klass):
+                    raise TypeError("Method must not return a value.")
+            
         except AssertionError:
             return self.__createTestTuple(msg="Assertion Error",startTime=start_time)
         except Exception as e:            
@@ -267,6 +278,5 @@ class TestManager(object):
             print(f"{Fore.GREEN}{'-'*50}\nCongratulations all Tests have been run!\n{'-'*50}\n")
 
         print(Style.RESET_ALL)
-
         
     

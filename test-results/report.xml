@@ -1,54 +1,117 @@
 <?xml version="1.0" ?>
-<testsuites disabled="0" errors="3" failures="0" tests="27" time="0.00026798248291015625">
-	<testsuite disabled="0" errors="0" failures="0" name="test_membershipTests.py" skipped="0" tests="2" time="6.29425048828125e-05">
-		<testcase name="TestIn.py" time="0.000042" classname="MembershipTests"/>
-		<testcase name="TestNotIn.py" time="0.000021" classname="MembershipTests"/>
-	</testsuite>
-	<testsuite disabled="0" errors="0" failures="0" name="test_truthinessTests.py" skipped="0" tests="4" time="4.1961669921875e-05">
-		<testcase name="TestIs.py" time="0.000016" classname="TruthinessTests"/>
-		<testcase name="TestIsFalse.py" time="0.000009" classname="TruthinessTests"/>
-		<testcase name="TestIsNot.py" time="0.000009" classname="TruthinessTests"/>
-		<testcase name="TestIsTrue.py" time="0.000008" classname="TruthinessTests"/>
-	</testsuite>
-	<testsuite disabled="0" errors="0" failures="0" name="test_equalityTests.py" skipped="0" tests="4" time="3.7670135498046875e-05">
-		<testcase name="TestAlmostEqual.py" time="0.000015" classname="EqualityTests"/>
-		<testcase name="TestEqual.py" time="0.000008" classname="EqualityTests"/>
-		<testcase name="TestNotAlmostEqual.py" time="0.000008" classname="EqualityTests"/>
-		<testcase name="TestNotEqual.py" time="0.000007" classname="EqualityTests"/>
-	</testsuite>
-	<testsuite disabled="0" errors="0" failures="0" name="test_rangeAndNumericTests.py" skipped="0" tests="5" time="3.266334533691406e-05">
-		<testcase name="TestGreater.py" time="0.000006" classname="RangeAndNumericTests"/>
-		<testcase name="TestGreaterEqual.py" time="0.000008" classname="RangeAndNumericTests"/>
-		<testcase name="TestInRange.py" time="0.000007" classname="RangeAndNumericTests"/>
-		<testcase name="TestLess.py" time="0.000006" classname="RangeAndNumericTests"/>
-		<testcase name="TestLessEqual.py" time="0.000006" classname="RangeAndNumericTests"/>
-	</testsuite>
-	<testsuite disabled="0" errors="0" failures="0" name="test_noneAndTypeTests.py" skipped="0" tests="4" time="2.9087066650390625e-05">
-		<testcase name="TestIsInstance.py" time="0.000008" classname="NoneAndTypeTests"/>
-		<testcase name="TestIsNone.py" time="0.000007" classname="NoneAndTypeTests"/>
-		<testcase name="TestIsNotInstance.py" time="0.000008" classname="NoneAndTypeTests"/>
-		<testcase name="TestIsNotNone.py" time="0.000006" classname="NoneAndTypeTests"/>
-	</testsuite>
-	<testsuite disabled="0" errors="0" failures="0" name="test_exceptionTests.py" skipped="0" tests="1" time="1.3828277587890625e-05">
-		<testcase name="TestRaises.py" time="0.000014" classname="ExceptionTests"/>
-	</testsuite>
-	<testsuite disabled="0" errors="0" failures="0" name="nestedTests.py" skipped="0" tests="1" time="6.9141387939453125e-06">
-		<testcase name="TestOuter.py" time="0.000007" classname="OuterTests"/>
-	</testsuite>
-	<testsuite disabled="0" errors="1" failures="0" name="exceptionTests.py" skipped="0" tests="2" time="1.5020370483398438e-05">
-		<testcase name="TestRaiseException.py" time="0.000008" classname="ExceptionTests"/>
-		<testcase name="TestUnhandledException.py" time="0.000007" classname="ExceptionTests">
-			<error type="error" message="Runtime Test Error"/>
+<testsuites disabled="0" errors="29" failures="1" tests="32" time="41.701451539993286">
+	<testsuite disabled="0" errors="1" failures="0" name="test_membershipTests.py" skipped="0" tests="2" time="36.30309748649597">
+		<testcase name="TestIn.py" time="35.728692" classname="MembershipTests"/>
+		<testcase name="TestNotIn.py" time="0.574406" classname="MembershipTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
 		</testcase>
 	</testsuite>
-	<testsuite disabled="0" errors="2" failures="0" name="assertionHelperTests.py" skipped="0" tests="4" time="2.7894973754882812e-05">
-		<testcase name="TestEqual.py" time="0.000012" classname="AssertionHelperTests">
-			<error type="error" message="(line 5) Asssert.Equal Error: Expected [9], got [10]"/>
+	<testsuite disabled="0" errors="4" failures="0" name="test_truthinessTests.py" skipped="0" tests="4" time="1.9379377365112305">
+		<testcase name="TestIs.py" time="0.599673" classname="TruthinessTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
 		</testcase>
-		<testcase name="TestInRange.py" time="0.000007" classname="AssertionHelperTests"/>
-		<testcase name="TestRounded.py" time="0.000009" classname="AssertionHelperTests"/>
-		<testcase name="TestTrueFalse.py" classname="AssertionHelperTests">
-			<error type="error" message="FAILED OUT -&gt; (line 12) Asssert.IsTrue Error: "/>
+		<testcase name="TestIsFalse.py" time="0.475443" classname="TruthinessTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestIsNot.py" time="0.466428" classname="TruthinessTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestIsTrue.py" time="0.396394" classname="TruthinessTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="4" failures="0" name="test_equalityTests.py" skipped="0" tests="4" time="0.977623701095581">
+		<testcase name="TestAlmostEqual.py" time="0.361890" classname="EqualityTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestEqual.py" time="0.125436" classname="EqualityTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestNotAlmostEqual.py" time="0.159098" classname="EqualityTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestNotEqual.py" time="0.331200" classname="EqualityTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="5" failures="0" name="test_rangeAndNumericTests.py" skipped="0" tests="5" time="0.6466729640960693">
+		<testcase name="TestGreater.py" time="0.128840" classname="RangeAndNumericTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestGreaterEqual.py" time="0.144356" classname="RangeAndNumericTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestInRange.py" time="0.144483" classname="RangeAndNumericTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestLess.py" time="0.094621" classname="RangeAndNumericTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestLessEqual.py" time="0.134372" classname="RangeAndNumericTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="4" failures="0" name="test_noneAndTypeTests.py" skipped="0" tests="4" time="0.4963648319244385">
+		<testcase name="TestIsInstance.py" time="0.137395" classname="NoneAndTypeTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestIsNone.py" time="0.118306" classname="NoneAndTypeTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestIsNotInstance.py" time="0.136514" classname="NoneAndTypeTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestIsNotNone.py" time="0.104150" classname="NoneAndTypeTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="1" failures="0" name="test_exceptionTests.py" skipped="0" tests="1" time="0.1560204029083252">
+		<testcase name="TestRaises.py" time="0.156020" classname="ExceptionTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="1" failures="0" name="nestedTests.py" skipped="0" tests="1" time="0.10039401054382324">
+		<testcase name="TestOuter.py" time="0.100394" classname="OuterTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="2" failures="0" name="exceptionTests.py" skipped="0" tests="2" time="0.2765958309173584">
+		<testcase name="TestRaiseException.py" time="0.140684" classname="ExceptionTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestUnhandledException.py" time="0.135912" classname="ExceptionTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="4" failures="0" name="assertionHelperTests.py" skipped="0" tests="4" time="0.5231165885925293">
+		<testcase name="TestEqual.py" time="0.126211" classname="AssertionHelperTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestInRange.py" time="0.141690" classname="AssertionHelperTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestRounded.py" time="0.143210" classname="AssertionHelperTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestTrueFalse.py" time="0.112005" classname="AssertionHelperTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+	</testsuite>
+	<testsuite disabled="0" errors="3" failures="1" name="skipAndExpectedTests.py" skipped="1" tests="5" time="0.283627986907959">
+		<testcase name="TestFailOutFail.py" time="0.157688" classname="ConditionalTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestFailOutPass.py" classname="ConditionalTests">
+			<error type="error" message="FAILED OUT -&gt; Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestKnownBug.py" classname="ConditionalTests">
+			<failure type="failure" message="Expected Failure"/>
+		</testcase>
+		<testcase name="TestRegular.py" time="0.125940" classname="ConditionalTests">
+			<error type="error" message="Method Timed-out after 5 seconds."/>
+		</testcase>
+		<testcase name="TestUnimplemented.py" classname="ConditionalTests">
+			<skipped type="skipped" message="Skipped"/>
 		</testcase>
 	</testsuite>
 </testsuites>

@@ -6,7 +6,7 @@ class AssertionHelperTests:
 
     def TestInRange(self):
         Assert.InRange(5, 1, 10)
-    @failOut
+
     def TestTrueFalse(self):
         Assert.IsTrue(3 < 5)
         Assert.IsTrue(5 < 3)

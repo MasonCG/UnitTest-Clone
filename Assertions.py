@@ -143,8 +143,6 @@ class Assert():
         
         Assert.__raiseError(f"No Error Raised")
         
-    # def Warns(warning_type, func, *args, **kwargs)
-
     def Greater(a, b) -> Exception | bool:
         """ Raises error if a <= b """
         if not a > b:
@@ -180,15 +178,3 @@ class Assert():
             Assert.__raiseError(f'[{x}] not in range [{low, high}]')
         
         return True
-
-""" 
-    Exception and Warning
-    assertWarns(warning_type, func, *args, **kwargs)	True if warning raised.
-    Custom Utility Booleans (optional but common in clones)
-    assertFileExists(path)	True if file exists.
-    assertDictContainsSubset(subset, dictionary)	True if dict contains keys and values.
-    assertCountEqual(a, b)	True if two sequences have same elements with same counts.
-    assertSameElements(a, b)	True if sets of elements match.
-    assertJsonEqual(json1, json2)	True if parsed JSON objects match.
-    assertWithinDelta(a, b, delta)	True if abs(a-b) <= delta.
-    """
